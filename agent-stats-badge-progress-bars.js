@@ -47,16 +47,4 @@ $("#predictionTable > tbody:eq(0) > tr").each(function(i, tr){
     var progressBar = '<div style="border: 1px solid ' + color + '; width: 102px; height: 7px; margin: 2px 0px; padding: 0px;">' +
         '<div style="border: 0px solid black; width: ' + progress + 'px; height: 5px; margin: 0px; padding: 0px; background-color: ' + color + ';"></div></div>';
     td.append(progressBar);
-/*    $("td", tr).each(function(j, td){
-        if ( 4 <= j && j <= 21 ) {
-            var value = parseInt($(td).html().replace(/,/g, ""));
-            var color = "#00c1b8";
-            for ( var k = 4 ; 0 <= k ; k-- ) {
-                if ( requirements[j-4][k] < value ) {
-                    color = colors[k];
-                    break;
-                }
-            }
-            $(td).css("background-color", color);
-        }*/
 });
