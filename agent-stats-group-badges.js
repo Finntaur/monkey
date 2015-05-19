@@ -41,7 +41,7 @@ $("#group > tbody > tr").each(function(i, tr){
             var value = parseInt($(td).html().replace(/,/g, ""));
             var color = "";
             for ( var k = 4 ; 0 <= k ; k-- ) {
-                if ( requirements[j-4][k] < value ) {
+                if ( requirements[j-4][k] <= value ) {
                     color = colors[k];
                     break;
                 }
