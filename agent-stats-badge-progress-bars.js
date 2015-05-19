@@ -1,12 +1,16 @@
 // ==UserScript==
 // @name       Agent Stats Badge Progress Bars
 // @namespace  https://github.com/finntaur/monkey
-// @version    0.1.201505190200
+// @version    0.1.201505190300
 // @description  Create progress bars for badges in the default view.
 // @include    https://www.agent-stats.com/
 // @include    http://www.agent-stats.com/
+// @include    https://www.agent-stats.com/index.php*
+// @include    http://www.agent-stats.com/index.php*
 // @match      https://www.agent-stats.com/
 // @match      http://www.agent-stats.com/
+// @match      https://www.agent-stats.com/index.php*
+// @match      http://www.agent-stats.com/index.php*
 // @grant      none
 // @copyright  2015+, Finntaur
 // @require http://code.jquery.com/jquery-latest.js
@@ -34,7 +38,7 @@ var requirements = [
 
 ];
 
-$("#predictionTable > tbody:eq(0) > tr").each(function(i, tr){
+if ( $("tr.rotate").size() == 0 ) { $("#predictionTable > tbody:eq(0) > tr").each(function(i, tr){
     var td = $("td:eq(4)", tr);
     var color = "#fdd73c";
     var value = parseInt(td.html().replace(/,/g, ""));
@@ -47,4 +51,4 @@ $("#predictionTable > tbody:eq(0) > tr").each(function(i, tr){
     var progressBar = '<div style="border: 1px solid ' + color + '; width: 102px; height: 7px; margin: 2px 0px; padding: 0px;">' +
         '<div style="border: 0px solid black; width: ' + progress + 'px; height: 5px; margin: 0px; padding: 0px; background-color: ' + color + ';"></div></div>';
     td.append(progressBar);
-});
+});}
