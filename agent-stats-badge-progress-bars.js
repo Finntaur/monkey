@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name       Agent Stats Badge Progress Bars
 // @namespace  https://github.com/finntaur/monkey
-// @version    0.1.201505190300
+// @version    0.1.201507102320
 // @description  Create progress bars for badges in the default view.
 // @include    https://www.agent-stats.com/
 // @include    http://www.agent-stats.com/
@@ -13,7 +13,6 @@
 // @match      http://www.agent-stats.com/index.php*
 // @grant      none
 // @copyright  2015+, Finntaur
-// @require http://code.jquery.com/jquery-latest.js
 // ==/UserScript==
 
 var requirements = [
