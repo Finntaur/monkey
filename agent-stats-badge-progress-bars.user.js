@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name       Agent Stats Badge Progress Bars
 // @namespace  https://github.com/finntaur/monkey
-// @version    0.1.201507102320
+// @version    0.1.201601051120
 // @description  Create progress bars for badges in the default view.
 // @include    https://www.agent-stats.com/
 // @include    http://www.agent-stats.com/
@@ -14,6 +14,8 @@
 // @grant      none
 // @copyright  2015+, Finntaur
 // ==/UserScript==
+
+/* require http://code.jquery.com/jquery-latest.js */
 
 var requirements = [
     [100, 1000, 2000, 10000, 30000], // Explorer
@@ -46,8 +48,18 @@ if ( $("tr.rotate").size() == 0 ) { $("#predictionTable > tbody:eq(0) > tr").eac
         progress = value * 100 / requirements[i][j];
         if ( progress < 100 ) { break; }
     }
-    if ( 100 < progress ) { progress = 100; }
-    var progressBar = '<div style="border: 1px solid ' + color + '; width: 102px; height: 7px; margin: 2px 0px; padding: 0px;">' +
+    var bars = Math.floor(progress / 100);
+    if ( 100 < progress ) { progress = progress - 100 * bars; }
+    var progressBar = "";
+    
+    // Comment this section out to disable multiples for onyx medals. -->
+    for ( var j = 0 ; j < bars ; j++ ) {
+      progressBar = '' + progressBar + '<div style="border: 1px solid ' + color + '; width: 102px; height: 7px; margin: 2px 0px; padding: 0px;">' +
+        '<div style="border: 0px solid black; width: 100px; height: 5px; margin: 0px; padding: 0px; background-color: ' + color + ';"></div></div>';
+    }
+    // <-- Comment this section out to disable multiples for onyx medals.
+    
+    progressBar = '' + progressBar + '<div style="border: 1px solid ' + color + '; width: 102px; height: 7px; margin: 2px 0px; padding: 0px;">' +
         '<div style="border: 0px solid black; width: ' + progress + 'px; height: 5px; margin: 0px; padding: 0px; background-color: ' + color + ';"></div></div>';
     td.append(progressBar);
 });}
