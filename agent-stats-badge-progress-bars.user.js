@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name       Agent Stats Badge Progress Bars
 // @namespace  https://github.com/finntaur/monkey
-// @version    0.1.201601051120
+// @version    0.1.201604081245
 // @description  Create progress bars for badges in the default view.
 // @include    https://www.agent-stats.com/
 // @include    http://www.agent-stats.com/
@@ -32,6 +32,7 @@ var requirements = [
     [2000, 10000, 30000, 100000, 300000], // Purifier
     [3, 10, 20, 90, 150], // Guardian
     [5, 25, 100, 200, 500], // SpecOps
+    [1, 3, 6, 10, 20], // Mission Day
     [2000, 10000, 30000, 100000, 200000], // Hacker
     [200, 2000, 6000, 20000, 50000], // Translator
     [15, 30, 60, 180, 360], // Sojourner
