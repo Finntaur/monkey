@@ -2,7 +2,7 @@
 // @id             iitc-commfilter
 // @name           IITC plugin: COMM Filter
 // @category       Info
-// @version        0.1.0.20161014.1255
+// @version        0.1.0.20161212.1030
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Finntaur/monkey/raw/master/iitc-commfilter.meta.js
 // @downloadURL    https://github.com/Finntaur/monkey/raw/master/iitc-commfilter.user.js
