@@ -2,7 +2,7 @@
 // @id             iitc-commfilter
 // @name           IITC plugin: COMM Filter
 // @category       Info
-// @version        0.1.0.20161212.1030
+// @version        0.1.0.20170130.1405
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/Finntaur/monkey/raw/master/iitc-commfilter.meta.js
 // @downloadURL    https://github.com/Finntaur/monkey/raw/master/iitc-commfilter.user.js
@@ -32,11 +32,13 @@ window.plugin.commFilter.filters = [
     /^Agent_\d+$/,
     /xmps\.biz/i,
     /ingress\-store\.com/i,
+    /ingress\-store\.net/i,
     /ingress\-shop\.net/i,
     /ingressstore\.ru/i,
     /ingressfarm\.com/i,
     /shop-ingress\.com/i,
-    /ingintems\.net/i
+    /ingintems\.net/i,
+    /ecwid\.com/i
 ];
 window.plugin.commFilter.addHooks = function() {
     addHook('publicChatDataAvailable' , window.plugin.commFilter.processChatData);
