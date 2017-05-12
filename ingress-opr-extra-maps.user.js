@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name       Ingress OPR Extra Maps
 // @namespace  https://github.com/finntaur/monkey
-// @version    0.201705122140
+// @version    0.201705122200
 // @description  Add extra map links to the portal candidate.
 // @include    https://opr.ingress.com/recon
 // @include    http://opr.ingress.com/recon
@@ -96,14 +96,6 @@ function wrapper() {
         var coords = window.plugin.extraMaps.extractCoordinates();
         if ( window.plugin.extraMaps.OSM_ENABLED ) $("#extraMapsOSMURL").attr("href", window.plugin.extraMaps.getOSMURL(coords));
         if ( window.plugin.extraMaps.MAANMITTAUSLAITOS_ENABLED ) $("#extraMapsMMLURL").attr("href", window.plugin.extraMaps.getMMLURL(coords));
-
-    };
-
-    window.plugin.extraMaps.wait = true;
-
-    window.plugin.extraMaps.creeper = function(coords) {
-
-        var div = $("#descriptionDiv");
 
     };
 
