@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name       Ingress OPR Extra Maps
 // @namespace  https://github.com/finntaur/monkey
-// @version    0.201705122200
+// @version    0.201705132230
 // @description  Add extra map links to the portal candidate.
 // @include    https://opr.ingress.com/recon
 // @include    http://opr.ingress.com/recon
@@ -21,9 +21,9 @@ function wrapper() {
     // ------------------------------------------------------------------------
 
     window.plugin.extraMaps.OSM_ENABLED = true;
-    window.plugin.extraMaps.OSM_ZOOM_LEVEL = 14;
-    window.plugin.extraMaps.MAANMITTAUSLAITOS_ENABLED = false;
-    window.plugin.extraMaps.DEBUG = true;
+    window.plugin.extraMaps.OSM_ZOOM_LEVEL = 16;
+    window.plugin.extraMaps.MAANMITTAUSLAITOS_ENABLED = true;
+    window.plugin.extraMaps.DEBUG = false;
 
     // ------------------------------------------------------------------------
     // END SETTINGS
@@ -81,11 +81,23 @@ function wrapper() {
 
     };
 
+    // Simple check whether or not the target is in Finland.
+    window.plugin.extraMaps.isFinnishTarget = function() {
+
+        if ( null === window.plugin.extraMaps.anchor ) window.plugin.extraMaps.findAnchor();
+        var regexp = / (Finland|Suomi)$/;
+        return regexp.test(window.plugin.extraMaps.anchor.text().trim());
+
+    };
+
     // Formulate the URL for given coordinates for Maanmittauslaitos.
     window.plugin.extraMaps.getMMLURL = function(coords) {
 
-        // TODO: Coordinate transformation, or preferably how to force feed current coordinates.
-        return "";
+        // The marker may be pointed to a slightly different position on the map
+        // due to different coordinate systems.
+        // TODO: Verify the accuracy or figure out a better way to link to these maps.
+        return "http://kansalaisen.karttapaikka.fi/linkki?y=" + coords.lon + "&x=" + coords.lat +
+            "&srs=EPSG:4258&scale=2000";
 
     };
 
@@ -95,22 +107,31 @@ function wrapper() {
         if ( window.plugin.extraMaps.DEBUG ) console.log("Refreshing URLs.");
         var coords = window.plugin.extraMaps.extractCoordinates();
         if ( window.plugin.extraMaps.OSM_ENABLED ) $("#extraMapsOSMURL").attr("href", window.plugin.extraMaps.getOSMURL(coords));
-        if ( window.plugin.extraMaps.MAANMITTAUSLAITOS_ENABLED ) $("#extraMapsMMLURL").attr("href", window.plugin.extraMaps.getMMLURL(coords));
-
+        if ( window.plugin.extraMaps.MAANMITTAUSLAITOS_ENABLED ) {
+            if ( window.plugin.extraMaps.isFinnishTarget() ) {
+                $("#extraMapsMMLURL").attr("href", window.plugin.extraMaps.getMMLURL(coords));
+            } else {
+                $("#extraMapsMMLURL").attr("href", "javascript:void(0);");
+            }
+        }
     };
 
     // Setup this plugin, create links for extra maps and
     // initialize listeners.
     window.plugin.extraMaps.setup = function() {
 
+        var astyle    = 'color: #55efec; font-weight: bold;';
+        var abbrstyle = 'border-bottom: 0px none black; text-decoration: none;';
+        var aprops = ' class="extraMaps" target="_blank" href="about:blank" tabindex="-1" style="' + astyle + '"';
+        var icon = "<sup>❐</sup>";
         var div = $("#descriptionDiv");
         div.append("<br>");
         if ( window.plugin.extraMaps.OSM_ENABLED ) {
-            div.append('[ <a id="extraMapsOSMURL" target="_blank" href="about:blank">OSM<sup>❐</sup></a> ]');
+            div.append('[ <a id="extraMapsOSMURL"' + aprops + '><abbr style="' + abbrstyle + '" title="OpenStreetMap">OSM</abbr>' + icon + '</a> ]');
             $("#extraMapsOSMURL").mousedown(window.plugin.extraMaps.refreshURLs);
         }
         if ( window.plugin.extraMaps.MAANMITTAUSLAITOS_ENABLED ) {
-            div.append('[ <a id="extraMapsMMLURL" target="_blank" href="about:blank">Maanmittauslaitos<sup>❐</sup></a> ]');
+            div.append('[ <a id="extraMapsMMLURL"' + aprops + '><abbr style="' + abbrstyle + '" title="Maanmittauslaitos">MML</abbr>' + icon + '</a> ]');
             $("#extraMapsMMLURL").mousedown(window.plugin.extraMaps.refreshURLs);
         }
 
