@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name       Ingress OPR Logger
 // @namespace  https://github.com/finntaur/monkey
-// @version    0.201705222350
+// @version    0.201705230030
 // @description  Logs coordinates and names of portal candidates.
 // @include    https://opr.ingress.com/recon
 // @include    http://opr.ingress.com/recon
@@ -22,6 +22,7 @@ function wrapper() {
 
     window.plugin.logger.DEBUG = false;
     window.plugin.logger.AUTOLOAD_ALL_IMAGES = false;
+    window.plugin.logger.MARKER_COLOR = "#55efec";
 
     // ------------------------------------------------------------------------
     // END SETTINGS
@@ -132,7 +133,10 @@ function wrapper() {
                 '<td>' + item.latitude + '</td>' +
                 '</tr>'
             );
-            iitcExport += '{"type":"marker","latLng":{"lat":' + item.latitude + ',"lng":' + item.longitude + '},"color":"#55efec"},';
+            iitcExport += '{"type":"marker","latLng":{"lat":' +
+                item.latitude + ',"lng":' +
+                item.longitude + '},"color":"' +
+                window.plugin.logger.MARKER_COLOR + '"},';
         }
 
         $("#logModalExport").html("[" + iitcExport.slice(0, -1) + "]");
