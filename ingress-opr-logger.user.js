@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name       Ingress OPR Logger
 // @namespace  https://github.com/finntaur/monkey
-// @version    0.201705230030
+// @version    0.201705231750
 // @description  Logs coordinates and names of portal candidates.
 // @include    https://opr.ingress.com/recon
 // @include    http://opr.ingress.com/recon
@@ -20,6 +20,7 @@ function wrapper() {
     // SETTINGS
     // ------------------------------------------------------------------------
 
+    window.plugin.logger.LOG_NUMBER_OF_STARS = true;
     window.plugin.logger.DEBUG = false;
     window.plugin.logger.AUTOLOAD_ALL_IMAGES = false;
     window.plugin.logger.MARKER_COLOR = "#55efec";
@@ -39,7 +40,7 @@ function wrapper() {
         return hash;
     };
 
-    window.plugin.logger.logged = false;
+    window.plugin.logger.currentId = null;
     window.plugin.logger.imgEl = null;
     window.plugin.logger.locationEl = null;
     window.plugin.logger.titleEl = null;
@@ -62,6 +63,19 @@ function wrapper() {
             }
         });
         window.plugin.logger.imgEl = $("div.ingress-background img")[0];
+
+    };
+
+    // How many stars are currently being given to the candidate.
+    window.plugin.logger.updateStars = function(id) {
+
+        if ( null === id || false === window.plugin.logger.LOG_NUMBER_OF_STARS ) return;
+        var stars = $("button[ng-model='answerCtrl.formData.quality']").find(".gold").length;
+        var item = JSON.parse(localStorage.getItem(id));
+        item.stars = stars;
+        var str = JSON.stringify(item);
+        if ( window.plugin.logger.DEBUG ) console.log("Updating: " + str);
+        localStorage.setItem(id, str);
 
     };
 
@@ -111,7 +125,10 @@ function wrapper() {
 
         $("#logModal")[0].style.display = "block";
         var table = $("#logModalContent");
-        table.html("<tr><th>Photo</th><th>Title</th><th>Longitude</th><th>Latitude</th></tr>");
+        table.html('<tr><th>Photo</th>' +
+             ( window.plugin.logger.LOG_NUMBER_OF_STARS ? '<th><span class="glyphicon glyphicon-star gold"></span></th>' : '' ) +
+             '<th>Title</th><th>Longitude</th><th>Latitude</th></tr>'
+        );
 
         var iitcExport = "";
         var items = localStorage.length;
@@ -128,6 +145,7 @@ function wrapper() {
             table.append(
                 '<tr>' +
                 '<td>' + image + '</td>' +
+                ( window.plugin.logger.LOG_NUMBER_OF_STARS ? '<td>' + ( item.stars || 0 ) + '</td>' : '' ) +
                 '<td>' + item.title + '</td>' +
                 '<td>' + item.longitude + '</td>' +
                 '<td>' + item.latitude + '</td>' +
@@ -172,7 +190,7 @@ function wrapper() {
 
         // Try to extract portal candidate details on every click until successful.
         $("body").click(function() {
-            if ( ! window.plugin.logger.logged ) {
+            if ( null === window.plugin.logger.currentId ) {
                 var details = window.plugin.logger.extractDetails();
                 if ( null === details ) {
                     console.log("Could not extract and record portal data.");
@@ -186,11 +204,12 @@ function wrapper() {
                     } else {
                         if ( window.plugin.logger.DEBUG ) console.log("Object " + id + " already exists in OPR log.");
                     }
-                    window.plugin.logger.logged = true;
+                    window.plugin.logger.currentId = id;
                 }
             } else {
                 if ( window.plugin.logger.DEBUG ) console.log("This candidate has already been logged.");
             }
+            window.plugin.logger.updateStars(window.plugin.logger.currentId);
         });
 
     };
