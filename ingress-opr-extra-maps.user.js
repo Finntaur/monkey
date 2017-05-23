@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name       Ingress OPR Extra Maps
 // @namespace  https://github.com/finntaur/monkey
-// @version    0.201705132230
+// @version    0.201705231650
 // @description  Add extra map links to the portal candidate.
 // @include    https://opr.ingress.com/recon
 // @include    http://opr.ingress.com/recon
@@ -23,6 +23,8 @@ function wrapper() {
     window.plugin.extraMaps.OSM_ENABLED = true;
     window.plugin.extraMaps.OSM_ZOOM_LEVEL = 16;
     window.plugin.extraMaps.MAANMITTAUSLAITOS_ENABLED = true;
+    window.plugin.extraMaps.INTEL_ENABLED = true;
+    window.plugin.extraMaps.INTEL_ZOOM_LEVEL = 17;
     window.plugin.extraMaps.DEBUG = false;
 
     // ------------------------------------------------------------------------
@@ -101,12 +103,20 @@ function wrapper() {
 
     };
 
+    // Formulate the URL for given coordinates for standard Ingress intel.
+    window.plugin.extraMaps.getIntelURL = function(coords) {
+
+        return "https://www.ingress.com/intel?ll=" + coords.lat + "," + coords.lon +"&z=" + window.plugin.extraMaps.INTEL_ZOOM_LEVEL;
+
+    };
+
     // Refresh all Extra Maps URLs.
     window.plugin.extraMaps.refreshURLs = function() {
 
         if ( window.plugin.extraMaps.DEBUG ) console.log("Refreshing URLs.");
         var coords = window.plugin.extraMaps.extractCoordinates();
         if ( window.plugin.extraMaps.OSM_ENABLED ) $("#extraMapsOSMURL").attr("href", window.plugin.extraMaps.getOSMURL(coords));
+        if ( window.plugin.extraMaps.INTEL_ENABLED ) $("#extraMapsIntelURL").attr("href", window.plugin.extraMaps.getIntelURL(coords));
         if ( window.plugin.extraMaps.MAANMITTAUSLAITOS_ENABLED ) {
             if ( window.plugin.extraMaps.isFinnishTarget() ) {
                 $("#extraMapsMMLURL").attr("href", window.plugin.extraMaps.getMMLURL(coords));
@@ -133,6 +143,10 @@ function wrapper() {
         if ( window.plugin.extraMaps.MAANMITTAUSLAITOS_ENABLED ) {
             div.append('[ <a id="extraMapsMMLURL"' + aprops + '><abbr style="' + abbrstyle + '" title="Maanmittauslaitos">MML</abbr>' + icon + '</a> ]');
             $("#extraMapsMMLURL").mousedown(window.plugin.extraMaps.refreshURLs);
+        }
+        if ( window.plugin.extraMaps.INTEL_ENABLED ) {
+            div.append('[ <a id="extraMapsIntelURL"' + aprops + '>Intel' + icon + '</a> ]');
+            $("#extraMapsIntelURL").mousedown(window.plugin.extraMaps.refreshURLs);
         }
 
     };
