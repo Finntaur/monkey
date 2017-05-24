@@ -1,12 +1,16 @@
 // ==UserScript==
 // @name       Ingress OPR Logger
 // @namespace  https://github.com/finntaur/monkey
-// @version    0.201705231750
-// @description  Logs coordinates and names of portal candidates.
+// @version    0.201705241715
+// @description  Logs details of handled portal candidates.
 // @include    https://opr.ingress.com/recon
 // @include    http://opr.ingress.com/recon
 // @match      https://opr.ingress.com/recon
 // @match      http://opr.ingress.com/recon
+// @include    https://opr.ingress.com/
+// @include    http://opr.ingress.com/
+// @match      https://opr.ingress.com/
+// @match      http://opr.ingress.com/
 // @grant      none
 // @copyright  2017+, Finntaur
 // @require http://code.jquery.com/jquery-latest.js
@@ -40,6 +44,7 @@ function wrapper() {
         return hash;
     };
 
+    window.plugin.logger.operateAtUrl = /^https?:\/\/opr\.ingress\.com\/recon/i;
     window.plugin.logger.currentId = null;
     window.plugin.logger.imgEl = null;
     window.plugin.logger.locationEl = null;
@@ -165,7 +170,7 @@ function wrapper() {
     window.plugin.logger.setup = function() {
 
         // Add means to access logs from the UI.
-        $("ul.nav").append('<li><a class="brand" href="#" id="openLog">Log</a></li>');
+        $("ul.nav:lt(1)").append('<li><a class="brand" href="#" id="openLog">Log</a></li>');
         $("#openLog").click(window.plugin.logger.display);
         $("head").append(
             '<style>' +
@@ -189,7 +194,7 @@ function wrapper() {
         $("#logModalCloseButton").click(function() { $("#logModal")[0].style.display = "none"; });
 
         // Try to extract portal candidate details on every click until successful.
-        $("body").click(function() {
+        if ( window.plugin.logger.operateAtUrl.test(window.location.href) ) $("body").click(function() {
             if ( null === window.plugin.logger.currentId ) {
                 var details = window.plugin.logger.extractDetails();
                 if ( null === details ) {
