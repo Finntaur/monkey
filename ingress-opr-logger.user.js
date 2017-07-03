@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name       Ingress OPR Logger
 // @namespace  https://github.com/finntaur/monkey
-// @version    0.201705241715
+// @version    0.201707031435
 // @description  Logs details of handled portal candidates.
 // @include    https://opr.ingress.com/recon
 // @include    http://opr.ingress.com/recon
@@ -83,6 +83,36 @@ function wrapper() {
         localStorage.setItem(id, str);
 
     };
+    // Merge entries from the imports textarea.
+    window.plugin.logger.mergeToDB = function(json) {
+        var items = JSON.parse(json);
+        var count = 0;
+        var skipped = 0;
+        for ( var i = 0; i < items.length; i++ ) {
+            var details = {};
+            var id = 0;
+            details.image = items[i].image;
+            details.title = items[i].title;
+            details.latitude = items[i].latitude;
+            details.longitude = items[i].longitude;
+            if ( window.plugin.logger.LOG_NUMBER_OF_STARS ) details.stars = ( items[i].stars || 0 );
+            id = details.image.split("/").slice(-1)[0].hashCode();
+
+            if ( id !== 0 && 0 < details.image.length &&
+                0 < details.image.length && 0 < details.latitude.length &&
+                0 < details.longitude.length && null === localStorage.getItem(id) ) {
+                var str = JSON.stringify(details);
+                if ( window.plugin.logger.DEBUG ) console.log("Appending: " + str);
+                localStorage.setItem(id, str);
+                count += 1;
+            } else {
+                skipped += 1;
+            }
+        }
+        $("#logModalJsonImport").val("");
+        alert("Imported " + count + " entries, skipped " + skipped + ".");
+        window.plugin.logger.display();
+    };
 
     // Extract portal candidate details.
     window.plugin.logger.extractDetails = function() {
@@ -136,9 +166,11 @@ function wrapper() {
         );
 
         var iitcExport = "";
+        var jsonExport = "";
         var items = localStorage.length;
         for ( var i = 0; i < items; i++ ) {
-            var item = JSON.parse(localStorage.getItem(localStorage.key(i)));
+            var raw = localStorage.getItem(localStorage.key(i));
+            var item = JSON.parse(raw);
             if ( window.plugin.logger.DEBUG ) console.log(item);
             var image = '<img class="ingress-background" style="border: 0px none black; width: 42px; height: 42px; padding: 0px; margin: 0px;" ';
             if ( window.plugin.logger.AUTOLOAD_ALL_IMAGES ) {
@@ -160,9 +192,11 @@ function wrapper() {
                 item.latitude + ',"lng":' +
                 item.longitude + '},"color":"' +
                 window.plugin.logger.MARKER_COLOR + '"},';
+            jsonExport += raw + ",";
         }
 
-        $("#logModalExport").html("[" + iitcExport.slice(0, -1) + "]");
+        $("#logModalIitcExport").html("[" + iitcExport.slice(0, -1) + "]");
+        $("#logModalJsonExport").html("[" + jsonExport.slice(0, -1) + "]");
 
     };
 
@@ -186,7 +220,11 @@ function wrapper() {
             '</div>' +
             '<div style="margin: 0px 16px;">' +
             '<span style="color: #9d9d9d">IITC Export:</span><br>' +
-            '<textarea readonly id="logModalExport" style="margin: 16px 0px 0px 0px; padding: 4px; border: 2px solid #55efec; background: black; color: white; width: 100%; height: 50px;"></textarea>' +
+            '<textarea readonly id="logModalIitcExport" style="margin: 5px 0px 16px 0px; padding: 4px; border: 2px solid #55efec; background: black; color: white; width: 100%; height: 50px;"></textarea>' +
+            '<span style="color: #9d9d9d">JSON Export:</span><br>' +
+            '<textarea readonly id="logModalJsonExport" style="margin: 5px 0px 16px 0px; padding: 4px; border: 2px solid #55efec; background: black; color: white; width: 100%; height: 50px;"></textarea>' +
+            '<span style="color: #9d9d9d">JSON Import:</span><br>' +
+            '<textarea onchange="window.plugin.logger.mergeToDB(this.value);" id="logModalJsonImport" style="margin: 5px 0px 16px 0px; padding: 4px; border: 2px solid #55efec; background: black; color: white; width: 100%; height: 50px;"></textarea>' +
             '</div>' +
             '<div style="margin: 16px;"><table id="logModalContent"></table></div>' +
             '</div>'
