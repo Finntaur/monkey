@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Agent Stats Group Badges
 // @namespace   https://github.com/Valenski/monkey
-// @version     0.1.201708030813
+// @version     0.1.201708091105
 // @description Colorize group view cells in Agent Stats based on related badges.
 // @include     *://www.agent-stats.com/groups.php*
 // @match       *://www.agent-stats.com/groups.php*
@@ -13,7 +13,6 @@
 var colors = new Array("#511d06", "#364142", "#744d22", "#282828", "#000000");
 var requirements = [
     [100, 1000, 2000, 10000, 30000], // Explorer
-    [10, 50, 200, 500, 5000], // Seer
     [100, 750, 2500, 5000, 10000], // Recon
     [10, 100, 300, 1000, 2500], // Trekker
     [2000, 10000, 30000, 100000, 200000], // Builder
@@ -93,7 +92,6 @@ $("#group > tbody > tr").each(function(i, tr){
 $("#group > tbody > tr").each(function(i, tr){
     $("td", tr).each(function(j, td){
         if ( 4 <= j && j <= 33 ) {
-            console.log("true");
             var value2 = parseInt($(td).html().replace(/,/g, ""));
             var color2 = "";
             for ( var l = 4 ; 0 <= l ; l-- ) {
