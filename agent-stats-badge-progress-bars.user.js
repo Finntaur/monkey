@@ -15,6 +15,7 @@
 
 var requirements = [
     [100, 1000, 2000, 10000, 30000], // Explorer
+    [10, 50, 200, 500, 5000], // Seer
     [100, 750, 2500, 5000, 10000], // Recon
     [10, 100, 300, 1000, 2500], // Trekker
     [2000, 10000, 30000, 100000, 200000], // Builder
@@ -36,7 +37,7 @@ var requirements = [
 ];
 
 var requirements2 = [
-    [10, 50, 200, 500, 5000], // Seer
+    [10, 50, 200, 500, 5000], // Discoverer
     [100000, 1000000, 10000000, 100000000, 200000000], // Collector
     [10, 200, 800, 1300, 1800], // Binder
     [5000, 30000, 100000, 1000000, 5000000], // Country-Master
@@ -51,7 +52,7 @@ var requirements2 = [
 
 if ( $("tr.rotate").size() === 0 ) {
     $("#predictionTable > tbody:eq(0) > tr").each(function(i, tr) {
-    var td = $("td:eq(4)", tr);
+    var td = $("td:eq(5)", tr);
     var color = "#fdd73c";
     var value = parseInt(td.html().replace(/,/g, ""));
     var progress = 0;
@@ -75,7 +76,7 @@ if ( $("tr.rotate").size() === 0 ) {
     td.append(progressBar);
     });
     $("#predictionTable > tbody:eq(1) > tr").each(function(i, tr) {
-    var td = $("td:eq(4)", tr);
+    var td = $("td:eq(5)", tr);
     var color = "#fdd73c";
     var value = parseInt(td.html().replace(/,/g, ""));
     var progress = 0;
