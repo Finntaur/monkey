@@ -13,6 +13,7 @@
 var colors = new Array("#511d06", "#364142", "#744d22", "#282828", "#000000");
 var requirements = [
     [100, 1000, 2000, 10000, 30000], // Explorer
+    [10, 50, 200, 500, 5000], // Seer
     [100, 750, 2500, 5000, 10000], // Recon
     [10, 100, 300, 1000, 2500], // Trekker
     [2000, 10000, 30000, 100000, 200000], // Builder
@@ -35,6 +36,7 @@ var requirements = [
 
 var requirements2 = [
     [100, 1000, 2000, 10000, 30000], // Explorer
+    [10, 50, 200, 500, 5000], // Discoverer
     [10, 50, 200, 500, 5000], // Seer
     [100000, 1000000, 10000000, 100000000, 200000000], // Collector
     [100, 750, 2500, 5000, 10000], // Recon
@@ -71,7 +73,7 @@ var checkBoxStatus = document.getElementsByName('additional')[0].checked;
 if (checkBoxStatus === false) {
 $("#group > tbody > tr").each(function(i, tr){
     $("td", tr).each(function(j, td){
-        if ( 4 <= j && j <= 22 ) {
+        if ( 4 <= j && j <= 23 ) {
             var value = parseInt($(td).html().replace(/,/g, ""));
             var color = "";
             for ( var k = 4 ; 0 <= k ; k-- ) {
@@ -91,7 +93,7 @@ $("#group > tbody > tr").each(function(i, tr){
 } else if (checkBoxStatus === true) {
 $("#group > tbody > tr").each(function(i, tr){
     $("td", tr).each(function(j, td){
-        if ( 4 <= j && j <= 33 ) {
+        if ( 4 <= j && j <= 34 ) {
             var value2 = parseInt($(td).html().replace(/,/g, ""));
             var color2 = "";
             for ( var l = 4 ; 0 <= l ; l-- ) {
